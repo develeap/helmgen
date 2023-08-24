@@ -1,6 +1,5 @@
 import os
 from kubernetes import client, config
-# from kubernetes.client import V1PodList, CoreV1Api, AppsV1Api
 from kubernetes.config.config_exception import ConfigException
 NAMESPACE_FILE = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
 

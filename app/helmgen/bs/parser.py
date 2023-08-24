@@ -23,8 +23,3 @@ class Parser:
                     print("======ingress======")
                     print(i)
         print("======")
-
-
-# if __name__ == "__main__":
-#     a = Parser("./config-minimal.yml")
-#     a.read_file()
