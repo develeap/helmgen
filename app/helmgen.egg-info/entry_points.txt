@@ -1,0 +1,2 @@
+[console_scripts]
+helmgen = helmgen.helmgen:main

@@ -1,0 +1,12 @@
+click
+pyyaml
+requests
+GitPython
+
+[doc]
+mkdocs
+
+[test]
+pytest
+coverage
+tox
