@@ -24,59 +24,62 @@ class BackendServiceAdapter:
         self.batch_api = client.BatchV1Api()
         self.networking_api = client.NetworkingV1Api()
 
-    def plan_deployment(self, apply=True):
-        container = client.V1Container(
-            name="deploymentgit",
-            image="gcr.io/google-appengine/fluentd-logger",
-            image_pull_policy="Never",
-            ports=[client.V1ContainerPort(container_port=5678)],
-        )
+    def plan_deployment(self, plan, apply=True):
+        containers = []
+        for container in plan["spec"]["template"]["spec"]["containers"]:
+            containers.append(client.V1Container(
+                name=container["name"],
+                image=container["image"],
+                #image_pull_policy="Never",
+                ports=[client.V1ContainerPort(container_port=container["port"] or [])],
+            ))
         # Template
         template = client.V1PodTemplateSpec(
-            metadata=client.V1ObjectMeta(labels={"app": "deployment"}),
-            spec=client.V1PodSpec(containers=[container]))
+            metadata=client.V1ObjectMeta(labels=plan["spec"]["labels"]),
+            spec=client.V1PodSpec(containers=containers))
         # Spec
         spec = client.V1DeploymentSpec(
-            replicas=1,
+            replicas=plan["spec"]["replicas"] or 1,
             selector=client.V1LabelSelector(
-                match_labels={"app": "deployment"}
+                match_labels=plan["spec"]["labels"]
             ),
             template=template)
         # Deployment
         deployment = client.V1Deployment(
             api_version="apps/v1",
             kind="Deployment",
-            metadata=client.V1ObjectMeta(name="deployment"),
+            metadata=client.V1ObjectMeta(name=plan["name"], labels=plan["metadata"]["labels"]),
             spec=spec)
-        # Creation of the Deployment in specified namespace
+        # Creation of the Deployment in specified namespacename
         # (Can replace "default" with a namespace you may have created)
         
         #print plan function
         print(deployment)
         if apply:
-            self.apply_deployment(deployment)
+            self.apply_deployment(deployment, plan["namespace"])
         
     
-    def apply_deployment(self, deployment):
+    def apply_deployment(self, deployment, namespace="default"):
         self.apps_api.create_namespaced_deployment(
-            namespace="default", body=deployment
+            namespace=namespace, body=deployment
         )
 
 
-    def create_service(self, apply):
+    def plan_service(self, plan, apply=True):
         self.core_api = client.CoreV1Api()
+        port_list = client.V1ServicePort(
+                    port= plan["spec"]["template"]["spec"]["container"][0],
+                    target_port=plan["spec"]["template"]["spec"]["container"][0])
+        
         svc = client.V1Service(
             api_version="v1",
             kind="Service",
             metadata=client.V1ObjectMeta(
-                name="service-example"
+                name=plan["name"]
             ),
             spec=client.V1ServiceSpec(
-                selector={"app": "deployment"},
-                ports=[client.V1ServicePort(
-                    port=5678,
-                    target_port=5678
-                )]
+                selector=plan["metadata"]["labels"],
+                ports=[port_list]
             )
         )
         # Creation of the Deployment in specified namespace
@@ -91,7 +94,7 @@ class BackendServiceAdapter:
         self.core_api.create_namespaced_service(namespace="default", body=svc)
 
 
-    def create_ingress(self, apply):
+    def plan_ingress(self, plan, apply):
         ingress = client.V1Ingress(
             api_version="networking.k8s.io/v1",
             kind="Ingress",
