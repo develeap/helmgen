@@ -83,6 +83,7 @@ class BackendServiceAdapter:
         # (Can replace "default" with a namespace you may have created)
         
         #print svc plan function
+        print(svc)
         if apply:
             self.apply_service(svc)
     
