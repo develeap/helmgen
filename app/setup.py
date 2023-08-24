@@ -9,7 +9,7 @@ def read(fname):
 
 def main():
     "Executes setup when this script is the top-level"
-    import cet as app
+    import helmgen as app
 
     setup(
         name=app.__project__,

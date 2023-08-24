@@ -5,6 +5,7 @@ from kubernetes.config.config_exception import ConfigException
 NAMESPACE_FILE = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
 
 class BackendServiceAdapter:
+<<<<<<< HEAD
     """ Class which interacts with Kubernetes resources (Pod, Services, Deployments) through Python. """
     def __init__(self, config_path = None, value_file = ""):
         self.value_file = value_file
@@ -152,3 +153,10 @@ if __name__ == "__main__":
     app =  BackendServiceAdapter("~/.kube/config")
     app.create_deployment()
     
+=======
+  def __init__(self, value_file):
+    self.value_file = value_file
+
+  def demo(self):
+        logging.info(f"value_file {self.value_file}") 
+>>>>>>> 42d635395ca4ced482fd23f1774822cbf1aa1647
