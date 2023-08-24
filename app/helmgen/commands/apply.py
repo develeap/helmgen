@@ -15,4 +15,7 @@ def apply(value_file):
     """ apply helm on cluster """
     bs_adapter = BackendServiceAdapter(value_file)
     parser = Parser(value_file)
+
+    print(parser.temp_func())
+    
     
