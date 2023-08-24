@@ -2,7 +2,6 @@ import os
 from kubernetes import client, config
 # from kubernetes.client import V1PodList, CoreV1Api, AppsV1Api
 from kubernetes.config.config_exception import ConfigException
-
 NAMESPACE_FILE = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
 
 class BackendServiceAdapter:
@@ -14,7 +13,7 @@ class BackendServiceAdapter:
             if config_path is not None:
                 print(f"Trying to load K8s config from {config_path}")
                 config.load_kube_config(config_file=config_path)
-                config_path = os.path.join(os.path.expanduser("~"), ".kube/config)")
+                #config_path = os.path.join(os.path.expanduser("~"), ".kube/config)")
             else:
                 config.load_incluster_config()
         except ConfigException:
@@ -24,7 +23,7 @@ class BackendServiceAdapter:
         self.apps_api = client.AppsV1Api()
         self.batch_api = client.BatchV1Api()
 
-    def create_deployment(apps_v1_api):
+    def create_deployment(self):
         container = client.V1Container(
             name="deployment",
             image="gcr.io/google-appengine/fluentd-logger",
@@ -50,7 +49,7 @@ class BackendServiceAdapter:
             spec=spec)
         # Creation of the Deployment in specified namespace
         # (Can replace "default" with a namespace you may have created)
-        apps_v1_api.create_namespaced_deployment(
+        self.apps_api.create_namespaced_deployment(
             namespace="default", body=deployment
         )
 
@@ -121,3 +120,8 @@ class BackendServiceAdapter:
 
     def demo(self):
             return self.value_file
+
+if __name__ == "__main__":
+    app =  BackendServiceAdapter("~/.kube/config")
+    app.create_deployment()
+    
