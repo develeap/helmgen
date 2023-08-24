@@ -16,6 +16,6 @@ def apply(value_file):
     bs_adapter = BackendServiceAdapter(value_file)
     parser = Parser(value_file)
 
-    print(parser.temp_func())
+    print(parser.read_file())
     
     
