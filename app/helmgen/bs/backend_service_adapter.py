@@ -26,12 +26,12 @@ class BackendServiceAdapter:
 
     def plan_deployment(self, plan, apply=True):
         containers = []
-        for container in plan["spec"]["template"]["spec"]["containers"]:
+        for i,container in enumerate(plan["spec"]["template"]["spec"]["containers"]):
             containers.append(client.V1Container(
                 name=container["name"],
                 image=container["image"],
                 #image_pull_policy="Never",
-                ports=[client.V1ContainerPort(container_port=container["port"] or [])],
+                ports=[client.V1ContainerPort(container_port=container[i]["port"] or [8000])],
             ))
         # Template
         template = client.V1PodTemplateSpec(

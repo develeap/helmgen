@@ -1,7 +1,7 @@
 import logging
 import yaml
 from pathlib import Path
-from backend_service_adapter import BackendServiceAdapter 
+from helmgen.bs.backend_service_adapter import BackendServiceAdapter 
 class Parser:
     def __init__(self,yaml_file):
         self.yaml_file = yaml_file
