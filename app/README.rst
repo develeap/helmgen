@@ -1,8 +1,8 @@
 
-
 Run commands: 
-1. pipenv shell
-2. pipenv install  
-3. cet
+1. install pipenv -- pip install pipenv
+2. cd helmgen/app && \
+pipenv install --system && \
+python setup.py install && \ 
 
-Then try: helmgen bs
+Then try: helmgen apply

@@ -16,4 +16,5 @@ def apply():
 def apply(cluster, value_file):
     """ apply helm on cluster """
     bs_adapter = BackendServiceAdapter(cluster, value_file)
+    bs_adapter.demo()
     

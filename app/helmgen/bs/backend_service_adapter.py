@@ -12,4 +12,4 @@ class BackendServiceAdapter:
     self.value_file = value_file
 
   def demo(self):
-        return self.value_file
+        logging.info(f"value_file {self.value_file}") 
