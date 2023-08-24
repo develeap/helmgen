@@ -1,0 +1,64 @@
+namespace: default
+deployments:
+  - name: required
+    kind: (Deployment)
+    metadata:
+      labels:
+        - app: (name)
+          name: (name)
+    spec:
+      replicas: (1)
+      selector:
+        matchLabels:
+          app: (name)
+      strategy: ({})
+      template:
+        metadata:
+          - app: (name)
+            name: (name)
+        spec:
+          containers:
+          - image: nginx
+            name: required
+            port: 1234
+          - image: busybox
+            name: required
+            port: 1234
+  - name: required2
+    kind: (Deployment)
+    metadata:
+      labels:
+        - app: (name)
+          name: (name)
+    spec:
+      replicas: (1)
+      selector:
+        matchLabels:
+          app: (name)
+      strategy: ({})
+      template:
+        metadata:
+        - app: (name)
+          name: (name)
+        spec:
+          containers:
+          - image: nginx
+            name: required
+            port: required
+          - image: busybox
+            name: required
+            port: 1234
+
+ingresses:
+  - name: required
+    path: required
+    ingressClassName: ("")
+    rules:
+    - http:
+        paths:
+        - path: (/svc-name)
+          pathType: (Prefix)
+          backend:
+            service:
+              name: (svc-name)
+              port: required

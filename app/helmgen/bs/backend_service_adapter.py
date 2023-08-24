@@ -26,29 +26,33 @@ class BackendServiceAdapter:
 
     def plan_deployment(self, plan, apply=True):
         containers = []
-        for i,container in enumerate(plan["spec"]["template"]["spec"]["containers"]):
+        labels = [{}]
+        for container in plan["spec"]["template"]["spec"]["containers"]:
             containers.append(client.V1Container(
                 name=container["name"],
                 image=container["image"],
                 #image_pull_policy="Never",
-                ports=[client.V1ContainerPort(container_port=container[i]["port"] or [8000])],
+                ports=[client.V1ContainerPort(container_port=container["port"] or [])]
             ))
         # Template
+        for label in plan["metadata"]["labels"]:
+            labels.append(label)
+
         template = client.V1PodTemplateSpec(
-            metadata=client.V1ObjectMeta(labels=plan["spec"]["labels"]),
+            metadata=client.V1ObjectMeta(labels=labels),
             spec=client.V1PodSpec(containers=containers))
         # Spec
         spec = client.V1DeploymentSpec(
             replicas=plan["spec"]["replicas"] or 1,
             selector=client.V1LabelSelector(
-                match_labels=plan["spec"]["labels"]
+                match_labels=labels
             ),
             template=template)
         # Deployment
         deployment = client.V1Deployment(
             api_version="apps/v1",
             kind="Deployment",
-            metadata=client.V1ObjectMeta(name=plan["name"], labels=plan["metadata"]["labels"]),
+            metadata=client.V1ObjectMeta(name=plan["name"], labels=labels),
             spec=spec)
         # Creation of the Deployment in specified namespacename
         # (Can replace "default" with a namespace you may have created)
@@ -56,7 +60,7 @@ class BackendServiceAdapter:
         #print plan function
         print(deployment)
         if apply:
-            self.apply_deployment(deployment, plan["namespace"])
+            self.apply_deployment(deployment, "default")
         
     
     def apply_deployment(self, deployment, namespace="default"):

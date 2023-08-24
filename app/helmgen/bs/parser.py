@@ -11,9 +11,10 @@ class Parser:
         logging.info(f"Parsing yaml file ==> {self.yaml_file}") 
         yaml_dict = yaml.safe_load(Path(self.yaml_file).read_text())
 
+        print(yaml.dump(yaml_dict,indent=4))
         print("======")
         for key in yaml_dict:
-            print(f"On {key}")
+            # print(f"On {key}")
             for i in yaml_dict[key]:
                 if ("deployments" in key):
                     #self.backend.plan_deployment(i, True)
