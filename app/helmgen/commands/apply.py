@@ -7,12 +7,6 @@ def apply():
     """ Apply the generated objects """
     pass
 
-@click.group()
-def template():
-    """ template the generated objects """
-    pass
-
-
 @apply.command()
 @click.argument('value_file')
 def apply(value_file):
