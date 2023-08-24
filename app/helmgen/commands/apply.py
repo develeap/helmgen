@@ -1,6 +1,6 @@
 import click
 from helmgen.bs.backend_service_adapter import BackendServiceAdapter
-from helmgen.utils.parser.parser import Parser
+from helmgen.bs.parser import Parser
 
 @click.group()
 def apply():
