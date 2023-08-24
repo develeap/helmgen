@@ -6,8 +6,7 @@ NAMESPACE_FILE = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
 
 class BackendServiceAdapter:
     """ Class which interacts with Kubernetes resources (Pod, Services, Deployments) through Python. """
-    def __init__(self, config_path = None, value_file = "~/.kube/config"):
-        self.value_file = value_file
+    def __init__(self, config_path = "~/.kube/config"):
         self.configuration = None  # will load defaults
         try:
             if config_path is not None:
@@ -26,7 +25,7 @@ class BackendServiceAdapter:
 
     def plan_deployment(self, plan, apply=True):
         containers = []
-        labels = [{}]
+        labels = {}
         for container in plan["spec"]["template"]["spec"]["containers"]:
             containers.append(client.V1Container(
                 name=container["name"],
@@ -36,7 +35,7 @@ class BackendServiceAdapter:
             ))
         # Template
         for label in plan["metadata"]["labels"]:
-            labels.append(label)
+            labels.update(label)
 
         template = client.V1PodTemplateSpec(
             metadata=client.V1ObjectMeta(labels=labels),
