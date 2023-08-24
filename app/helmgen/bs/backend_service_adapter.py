@@ -25,7 +25,7 @@ class BackendServiceAdapter:
 
     def create_deployment(self):
         container = client.V1Container(
-            name="deployment",
+            name="deploymentgit",
             image="gcr.io/google-appengine/fluentd-logger",
             image_pull_policy="Never",
             ports=[client.V1ContainerPort(container_port=5678)],
@@ -54,8 +54,8 @@ class BackendServiceAdapter:
         )
 
 
-    def create_service():
-        core_v1_api = client.CoreV1Api()
+    def create_service(self):
+        self.core_api = client.CoreV1Api()
         body = client.V1Service(
             api_version="v1",
             kind="Service",
@@ -72,7 +72,7 @@ class BackendServiceAdapter:
         )
         # Creation of the Deployment in specified namespace
         # (Can replace "default" with a namespace you may have created)
-        core_v1_api.create_namespaced_service(namespace="default", body=body)
+        self.core_api.create_namespaced_service(namespace="default", body=body)
 
 
     def create_ingress(networking_v1_api):
