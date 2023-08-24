@@ -138,6 +138,19 @@ class BackendServiceAdapter:
             body=ingress
         )
 
+    def delete_deployment(self, name, namespace):
+        """ Wrapper for AppsV1Api's delete_namespaced_deployment """
+        self.apps_api.delete_namespaced_deployment(name, namespace)
+
+    def delete_service(self, name, namespace):
+        """ Wrapper for AppsV1Api's delete_namespaced_service """
+        self.core_api.delete_namespaced_service(name, namespace)
+
+    def delete_ingress(self, name, namespace):
+        """ Wrapper for AppsV1Api's delete_namespaced_ingress """
+        self.networking_api.delete_namespaced_ingress(name, namespace)
+
+
 
     def list_namespaced_pods(self, namespace) -> client.V1PodList:
         """ Wrapper for CoreV1Api's list_namespaced_pod, returns the list of all pods in the namespace as V1PodList """
