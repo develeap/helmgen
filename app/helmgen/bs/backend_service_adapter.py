@@ -7,8 +7,7 @@ from random import randrange
 
 
 class BackendServiceAdapter:
-  def __init__(self, cluster, value_file):
-    self.cluster = cluster
+  def __init__(self, value_file):
     self.value_file = value_file
 
   def demo(self):
