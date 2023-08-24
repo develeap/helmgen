@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import click
-from cet.commands.backend_service import bs
-from cet.commands.octopus import octopus
+from helmgen.commands.apply import apply
+
 import logging
 
 @click.group()
