@@ -6,21 +6,15 @@ deployments:
       template:
         spec:
           containers:
-          - image: required
-            port: required
+            - image: required
+              port: required
 
 ingresses:
   - name: required
     path: required
     rules:
-    - http:
-        paths:
-        - backend:
-            service:
-              port: required
-
-helms:
-  - (path)
-    values:
-      value1:
-      value2:
+      - http:
+          paths:
+            - backend:
+                service:
+                  port: required

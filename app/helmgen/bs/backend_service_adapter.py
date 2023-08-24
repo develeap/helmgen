@@ -6,7 +6,7 @@ NAMESPACE_FILE = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
 
 class BackendServiceAdapter:
     """ Class which interacts with Kubernetes resources (Pod, Services, Deployments) through Python. """
-    def __init__(self, config_path = None, value_file = ""):
+    def __init__(self, config_path = None, value_file = "~/.kube/config"):
         self.value_file = value_file
         self.configuration = None  # will load defaults
         try:
@@ -149,6 +149,6 @@ class BackendServiceAdapter:
             return self.value_file
 
 if __name__ == "__main__":
-    app =  BackendServiceAdapter("~/.kube/config")
+    app =  BackendServiceAdapter()
     app.create_deployment()
     
