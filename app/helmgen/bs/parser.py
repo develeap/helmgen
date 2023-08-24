@@ -1,6 +1,5 @@
 import logging
 import yaml
-from yaml.loader import BaseLoader
 from pathlib import Path
 
 class Parser:
@@ -8,16 +7,18 @@ class Parser:
         self.yaml_file = yaml_file
 
     def read_file(self) -> None: 
-        resources = []
         logging.info(f"Parsing yaml file ==> {self.yaml_file}") 
         yaml_dict = yaml.safe_load(Path(self.yaml_file).read_text())
 
-
+        print("======")
         for key in yaml_dict:
-            logging.info(f"Detected {key}")
-            resources.append(key)
+            print(f"On {key}")
+            for i in yaml_dict[key]:
+                if ("deployments" in key):
+                    print("=======DEPLOYMENT=======")
+                    print(i)
+                if ("ingresses" in key):
+                    print("======ingress======")
+                    print(i)
 
-        return resources
-
-    def __str__(self):
-        return "hello from Parser Class"
+        print("======")
