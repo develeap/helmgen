@@ -12,7 +12,6 @@ class Parser:
         logging.info(f"Parsing yaml file ==> {self.yaml_file}") 
         yaml_dict = yaml.safe_load(Path(self.yaml_file).read_text())
 
-
         for key in yaml_dict:
             logging.info(f"Detected {key}")
             resources.append(key)
