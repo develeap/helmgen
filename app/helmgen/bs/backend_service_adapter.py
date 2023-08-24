@@ -22,8 +22,9 @@ class BackendServiceAdapter:
         self.core_api = client.CoreV1Api()
         self.apps_api = client.AppsV1Api()
         self.batch_api = client.BatchV1Api()
+        self.networking_api = client.NetworkingV1Api()
 
-    def create_deployment(self):
+    def plan_deployment(self, apply=True):
         container = client.V1Container(
             name="deploymentgit",
             image="gcr.io/google-appengine/fluentd-logger",
@@ -49,14 +50,22 @@ class BackendServiceAdapter:
             spec=spec)
         # Creation of the Deployment in specified namespace
         # (Can replace "default" with a namespace you may have created)
+        
+        #print plan function
+        print(deployment)
+        if apply:
+            self.apply_deployment(deployment)
+        
+    
+    def apply_deployment(self, deployment):
         self.apps_api.create_namespaced_deployment(
             namespace="default", body=deployment
         )
 
 
-    def create_service(self):
+    def create_service(self, apply):
         self.core_api = client.CoreV1Api()
-        body = client.V1Service(
+        svc = client.V1Service(
             api_version="v1",
             kind="Service",
             metadata=client.V1ObjectMeta(
@@ -72,11 +81,17 @@ class BackendServiceAdapter:
         )
         # Creation of the Deployment in specified namespace
         # (Can replace "default" with a namespace you may have created)
-        self.core_api.create_namespaced_service(namespace="default", body=body)
+        
+        #print svc plan function
+        if apply:
+            self.apply_service(svc)
+    
+    def apply_service(self, svc):
+        self.core_api.create_namespaced_service(namespace="default", body=svc)
 
 
-    def create_ingress(networking_v1_api):
-        body = client.V1Ingress(
+    def create_ingress(self, apply):
+        ingress = client.V1Ingress(
             api_version="networking.k8s.io/v1",
             kind="Ingress",
             metadata=client.V1ObjectMeta(name="ingress-example", annotations={
@@ -104,9 +119,17 @@ class BackendServiceAdapter:
         )
         # Creation of the Deployment in specified namespace
         # (Can replace "default" with a namespace you may have created)
-        networking_v1_api.create_namespaced_ingress(
+        
+        #add print ingress plan 
+        
+        print(ingress)
+        if apply:
+            self.apply_ingress(ingress)
+
+    def apply_ingress(self, ingress):
+        self.networking_api.create_namespaced_ingress(
             namespace="default",
-            body=body
+            body=ingress
         )
 
 
