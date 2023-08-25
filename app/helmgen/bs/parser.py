@@ -16,14 +16,9 @@ class Parser:
             print(f"On {key}")
             for i in yaml_dict[key]:
                 if ("deployments" in key):
-                    #self.backend.plan_deployment(i, True)
+                    self.backend.plan_deployment(i, True)
                     print(i)
                 if ("ingresses" in key):
                     print("======ingress======")
                     print(i)
         print("======")
-
-
-# if __name__ == "__main__":
-#     a = Parser("./config-minimal.yml")
-#     a.read_file()
