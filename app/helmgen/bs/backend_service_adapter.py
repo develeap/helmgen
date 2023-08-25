@@ -68,10 +68,11 @@ class BackendServiceAdapter:
         # print plan function
         print(deployment)
         if apply:
-            self.apply_deployment(deployment, "default")
+            self.apply_deployment(plan, deployment, namespace="default")
 
-    def apply_deployment(self, deployment, namespace="default"):
+    def apply_deployment(self, plan, deployment, namespace="default"):
         self.apps_api.create_namespaced_deployment(namespace=namespace, body=deployment)
+        self.plan_service(plan, apply=True)
 
     def plan_service(self, plan, apply=True):
         self.core_api = client.CoreV1Api()
