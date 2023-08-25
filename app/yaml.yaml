@@ -23,7 +23,7 @@ deployments:
               port: 1234
             - image: busybox
               name: busybox
-              port: 1234
+              port: 1235
   - name: required2
     kind: Deployment
     metadata:

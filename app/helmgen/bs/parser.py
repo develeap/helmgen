@@ -21,6 +21,6 @@ class Parser:
                     print(i)
                 if "ingresses" in key:
                     print("#######################ingress", i)
-                    self.backend.plan_ingress(i, True)
+                    # self.backend.plan_ingress(i, True)
 
         print("======")

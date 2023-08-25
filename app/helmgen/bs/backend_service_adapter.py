@@ -79,14 +79,11 @@ class BackendServiceAdapter:
         self.core_api = client.CoreV1Api()
         port_list = []
         ports = []
-        print(plan["spec"]["template"]["spec"]["containers"][0])
         for container in plan["spec"]["template"]["spec"]["containers"]:
-            port_list.append(container["port"])
-
+            port_list.append([container["port"], container["name"]])
         for port in port_list:
             new_port = client.V1ServicePort(
-                port=port,
-                target_port=port,
+                port=port[0], target_port=port[0], name=port[1]
             )
             ports.append(new_port)
 
@@ -95,7 +92,7 @@ class BackendServiceAdapter:
             kind="Service",
             metadata=client.V1ObjectMeta(name=plan["name"]),
             spec=client.V1ServiceSpec(
-                selector=plan["metadata"]["labels"], ports=[port_list]
+                selector=plan["metadata"]["labels"][0], ports=ports
             ),
         )
         # Creation of the Deployment in specified namespace
