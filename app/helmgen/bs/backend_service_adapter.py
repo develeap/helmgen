@@ -72,14 +72,23 @@ class BackendServiceAdapter:
 
     def apply_deployment(self, plan, deployment, namespace="default"):
         self.apps_api.create_namespaced_deployment(namespace=namespace, body=deployment)
+
         self.plan_service(plan, apply=True)
 
     def plan_service(self, plan, apply=True):
         self.core_api = client.CoreV1Api()
-        port_list = client.V1ServicePort(
-            port=plan["spec"]["template"]["spec"]["container"][0],
-            target_port=plan["spec"]["template"]["spec"]["container"][0],
-        )
+        port_list = []
+        ports = []
+        print(plan["spec"]["template"]["spec"]["containers"][0])
+        for container in plan["spec"]["template"]["spec"]["containers"]:
+            port_list.append(container["port"])
+
+        for port in port_list:
+            new_port = client.V1ServicePort(
+                port=port,
+                target_port=port,
+            )
+            ports.append(new_port)
 
         svc = client.V1Service(
             api_version="v1",
