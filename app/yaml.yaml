@@ -18,12 +18,12 @@ deployments:
             name: name
         spec:
           containers:
-          - image: nginx
-            name: nginx
-            port: 1234
-          - image: busybox
-            name: busybox
-            port: 1234
+            - image: nginx
+              name: nginx
+              port: 1234
+            - image: busybox
+              name: busybox
+              port: 1234
   - name: required2
     kind: Deployment
     metadata:
@@ -38,27 +38,28 @@ deployments:
       strategy: RollingUpdate
       template:
         metadata:
-        - app: name2
-          name: name2
+          - app: name2
+            name: name2
         spec:
           containers:
-          - image: nginx
-            name: nginx
-            port: 80
-          - image: busybox
-            name: busybox
-            port: 1234
+            - image: nginx
+              name: nginx
+              port: 80
+            - image: busybox
+              name: busybox
+              port: 1234
 
 ingresses:
   - name: required
     path: required
+    host: required
     ingressClassName: ""
     rules:
-    - http:
-        paths:
-        - path: /svc-name
-          pathType: Prefix
-          backend:
-            service:
-              name: svc-name
-              port: required
+      - http:
+          paths:
+            - path: /svc-name
+              pathType: Prefix
+              backend:
+                service:
+                  name: svc-name
+                  port: required
