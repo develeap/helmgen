@@ -1,10 +1,11 @@
 import click
+from helmgen.bs.backend_service_adapter import BackendServiceAdapter
 from helmgen.bs.parser import Parser
 
 
 @click.group()
 def apply():
-    """something Backend Service related commands"""
+    """Apply the generated objects"""
     pass
 
 
@@ -13,5 +14,4 @@ def apply():
 def apply(value_file):
     """apply helm on cluster"""
     parser = Parser(value_file)
-
     print(parser.read_file())
